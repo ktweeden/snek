@@ -26,7 +26,7 @@ class Snake {
     this.y -= this.movementSpeed
   }
 
-  moveDown() {
+  moveDowng() {
     this.y += this.movementSpeed
   }
 }
