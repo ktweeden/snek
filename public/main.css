@@ -1,0 +1,11 @@
+#game-container {
+  width: 100vw;
+  height: 500px;
+  display: flex;
+  align-content: center;
+  justify-content: center
+}
+
+canvas {
+  border: 1px solid black;
+}
