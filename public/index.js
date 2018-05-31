@@ -20,7 +20,7 @@ class Snake {
   }
 
   draw() {
-    console.log("x: ", this.x, "y:", this.y);
+    // console.log("x: ", this.x, "y:", this.y);
     
     this.context.beginPath()
     this.context.rect(this.x, this.y, 10, 10)
@@ -44,16 +44,33 @@ class Snake {
   }
 }
 
+
 const game = function() {
   const canvas = document.querySelector('canvas')
   const context = canvas.getContext('2d')
   const snake = new Snake(context)
-  snake.draw()
+
+  const createFoodPosition = function () {
+    const x = Math.floor(Math.random() * canvas.width)
+    const y = Math.floor(Math.random() * canvas.height)
+    return { x: x, y: y }
+  }
+
+  const foodPosition = createFoodPosition()
+  console.log(foodPosition);
+  
+
+  const drawFood = function () {
+    context.beginPath()
+    context.rect(foodPosition.x, foodPosition.y, 5, 5)
+    context.fill()
+  }
 
 
   const drawGame = function() {
     context.clearRect(0, 0, canvas.width, canvas.height)
     snake.draw()
+    drawFood()
     snake.move[snake.currentDirection]()    
     if (snake.y >= 0 && snake.y < canvas.height-9 && snake.x >= 0 && snake.x < canvas.width-9) {
       window.requestAnimationFrame(drawGame)
