@@ -5,7 +5,8 @@ class Snake {
     this.movementSpeed = 2
     this.context = context
     this.currentDirection = "ArrowUp"
-    this.length = 1
+    this.currentLength = 1
+    this.cells = [{x: this.x, y: this.y}]
 
     this.moveLeft = this.moveLeft.bind(this)
     this.moveRight = this.moveRight.bind(this)
@@ -22,32 +23,41 @@ class Snake {
 
   draw() {
     this.context.beginPath()
-    let modifyer = 0
-    for(let i = 0; i < this.length; i ++) {
-      this.context.rect(this.x+modifyer, this.y, 10, 10)
-      modifyer += 10
+    for (let cell of this.cells) {
+      this.context.rect(cell.x, cell.y, 10, 10)
     }
     this.context.fill()
   }
 
+  updateCells() {
+    this.cells.push({ x: this.x, y: this.y })
+    if (this.cells.length > this.currentLength) {
+      this.cells.shift()
+    }
+  }
+
   moveLeft() {
     this.x -= this.movementSpeed
+    this.updateCells()
   }
 
   moveRight() {
     this.x += this.movementSpeed
+    this.updateCells()
   }
 
   moveUp() {    
     this.y -= this.movementSpeed
+    this.updateCells()
   }
 
   moveDown() {
     this.y += this.movementSpeed
+    this.updateCells()
   }
 
   grow() {
-    this.length += 1
+    this.currentLength += 10/this.movementSpeed
   }
 }
 
@@ -56,6 +66,7 @@ const game = function() {
   const canvas = document.querySelector('canvas')
   const context = canvas.getContext('2d')
   const snake = new Snake(context)
+  const score = 0
 
   const createFoodPosition = function () {
     const x = Math.floor(Math.random() * canvas.width)
