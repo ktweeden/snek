@@ -5,6 +5,7 @@ class Snake {
     this.movementSpeed = 2
     this.context = context
     this.currentDirection = "ArrowUp"
+    this.length = 1
 
     this.moveLeft = this.moveLeft.bind(this)
     this.moveRight = this.moveRight.bind(this)
@@ -20,10 +21,12 @@ class Snake {
   }
 
   draw() {
-    // console.log("x: ", this.x, "y:", this.y);
-    
     this.context.beginPath()
-    this.context.rect(this.x, this.y, 10, 10)
+    let modifyer = 0
+    for(let i = 0; i < this.length; i ++) {
+      this.context.rect(this.x+modifyer, this.y, 10, 10)
+      modifyer += 10
+    }
     this.context.fill()
   }
 
@@ -42,6 +45,10 @@ class Snake {
   moveDown() {
     this.y += this.movementSpeed
   }
+
+  grow() {
+    this.length += 1
+  }
 }
 
 
@@ -56,8 +63,7 @@ const game = function() {
     return { x: x, y: y }
   }
 
-  const foodPosition = createFoodPosition()
-  console.log(foodPosition);
+  let foodPosition = createFoodPosition()
   
 
   const drawFood = function () {
@@ -66,12 +72,22 @@ const game = function() {
     context.fill()
   }
 
+  const detectFoodCollision = function () {
+    if (foodPosition.x >= snake.x && foodPosition.x <= snake.x + 10 && foodPosition.y >= snake.y && foodPosition.y <= snake.y + 10) {
+      return true
+    }
+    else { return false }
+  }
 
   const drawGame = function() {
     context.clearRect(0, 0, canvas.width, canvas.height)
     snake.draw()
     drawFood()
-    snake.move[snake.currentDirection]()    
+    snake.move[snake.currentDirection]()
+    if(detectFoodCollision()) {
+      foodPosition = createFoodPosition()
+      snake.grow()
+    }
     if (snake.y >= 0 && snake.y < canvas.height-9 && snake.x >= 0 && snake.x < canvas.width-9) {
       window.requestAnimationFrame(drawGame)
     }
